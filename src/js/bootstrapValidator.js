@@ -359,6 +359,96 @@
         },
 
         /**
+         * Updates the error display for a field.
+         *
+         * @param {jQuery} $field The field element
+         */
+        updateDisplay: function($field) {
+            console.log('UPDATE DISPLAY');
+
+            var that       = this,
+                field     = $field.attr('name'),
+                validators = this.options.fields[field].validators,
+                $parent   = $field.parents('.form-group'),
+                $errors   = $parent.find('.help-block[data-bs-validator]');
+
+            // Start off as valid
+            var validateResult = this.STATUS_VALID;
+
+            for (validatorName in validators) {
+                var status = this.results[field][validatorName];
+
+                switch (status) {
+                    case this.STATUS_INVALID:
+                        validateResult = this.STATUS_INVALID;
+                        this._disableSubmitButtons(true);
+
+                        // Add has-error class to parent element
+                        $parent.removeClass('has-success').addClass('has-error');
+
+                        $errors.filter('[data-bs-validator="' + validatorName + '"]').html(message).show();
+
+                        if (this.options.feedbackIcons) {
+                            // Show invalid icon
+                            $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.invalid).show();
+                        }
+                        break;
+
+                    case this.STATUS_VALIDATING:
+                        validateResult = this.STATUS_VALIDATING;
+                        break;
+
+                    case this.STATUS_VALID:
+                        validateResult = this.STATUS_VALID;
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+                console.log(validateResult, "<<<< result");
+
+                if (validateResult === this.STATUS_INVALID) {
+                    break;
+                }
+            }
+
+
+            if (validateResult === this.STATUS_VALID) {
+                // Hide error element
+                $errors.filter('[data-bs-validator="' + validatorName + '"]').hide();
+
+                // If the field is valid
+                if ($errors.filter(function() {
+                        var display = $(this).css('display'), v = $(this).attr('data-bs-validator');
+                        return ('block' == display) || (that.results[field][v] != that.STATUS_VALID);
+                    }).length == 0
+                ) {
+                    this._disableSubmitButtons(false);
+
+                    $parent.removeClass('has-error').addClass('has-success');
+                    // Show valid icon
+                    if (this.options.feedbackIcons) {
+                        $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.invalid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.valid).show();
+                    }
+                }
+            } else if (validateResult === this.STATUS_VALIDATING) {
+                this._disableSubmitButtons(true);
+
+                $parent.removeClass('has-success').removeClass('has-error');
+                // TODO: Show validating message
+                $errors.filter('.help-block[data-bs-validator="' + validatorName + '"]').html(message).hide();
+
+                if (this.options.feedbackIcons) {
+                    // Show validating icon
+                    $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.invalid).addClass(this.options.feedbackIcons.validating).show();
+                }
+            }
+
+        },
+
+        /**
          * Check the form validity
          *
          * @returns {Boolean}
@@ -405,59 +495,60 @@
             switch (status) {
                 case this.STATUS_VALIDATING:
                     this.results[field][validatorName] = this.STATUS_VALIDATING;
-                    this._disableSubmitButtons(true);
+                    // this._disableSubmitButtons(true);
 
-                    $parent.removeClass('has-success').removeClass('has-error');
-                    // TODO: Show validating message
-                    $errors.filter('.help-block[data-bs-validator="' + validatorName + '"]').html(message).hide();
+                    // $parent.removeClass('has-success').removeClass('has-error');
+                    // // TODO: Show validating message
+                    // $errors.filter('.help-block[data-bs-validator="' + validatorName + '"]').html(message).hide();
 
-                    if (this.options.feedbackIcons) {
-                        // Show validating icon
-                        $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.invalid).addClass(this.options.feedbackIcons.validating).show();
-                    }
+                    // if (this.options.feedbackIcons) {
+                    //     // Show validating icon
+                    //     $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.invalid).addClass(this.options.feedbackIcons.validating).show();
+                    // }
                     break;
 
                 case this.STATUS_INVALID:
                     this.results[field][validatorName] = this.STATUS_INVALID;
                     this._disableSubmitButtons(true);
 
-                    // Add has-error class to parent element
-                    $parent.removeClass('has-success').addClass('has-error');
+                    // // Add has-error class to parent element
+                    // $parent.removeClass('has-success').addClass('has-error');
 
-                    $errors.filter('[data-bs-validator="' + validatorName + '"]').html(message).show();
+                    // $errors.filter('[data-bs-validator="' + validatorName + '"]').html(message).show();
 
-                    if (this.options.feedbackIcons) {
-                        // Show invalid icon
-                        $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.invalid).show();
-                    }
+                    // if (this.options.feedbackIcons) {
+                    //     // Show invalid icon
+                    //     $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.valid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.invalid).show();
+                    // }
                     break;
 
                 case this.STATUS_VALID:
                     this.results[field][validatorName] = this.STATUS_VALID;
 
-                    // Hide error element
-                    $errors.filter('[data-bs-validator="' + validatorName + '"]').hide();
+                    // // Hide error element
+                    // $errors.filter('[data-bs-validator="' + validatorName + '"]').hide();
 
-                    // If the field is valid
-                    if ($errors.filter(function() {
-                            var display = $(this).css('display'), v = $(this).attr('data-bs-validator');
-                            return ('block' == display) || (that.results[field][v] != that.STATUS_VALID);
-                        }).length == 0
-                    ) {
-                        this._disableSubmitButtons(false);
+                    // // If the field is valid
+                    // if ($errors.filter(function() {
+                    //         var display = $(this).css('display'), v = $(this).attr('data-bs-validator');
+                    //         return ('block' == display) || (that.results[field][v] != that.STATUS_VALID);
+                    //     }).length == 0
+                    // ) {
+                    //     this._disableSubmitButtons(false);
 
-                        $parent.removeClass('has-error').addClass('has-success');
-                        // Show valid icon
-                        if (this.options.feedbackIcons) {
-                            $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.invalid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.valid).show();
-                        }
-                    }
+                    //     $parent.removeClass('has-error').addClass('has-success');
+                    //     // Show valid icon
+                    //     if (this.options.feedbackIcons) {
+                    //         $parent.find('.form-control-feedback').removeClass(this.options.feedbackIcons.invalid).removeClass(this.options.feedbackIcons.validating).addClass(this.options.feedbackIcons.valid).show();
+                    //     }
+                    // }
                     break;
 
                 default:
                     break;
             }
 
+            this.updateDisplay($field);
             return this;
         },
 
