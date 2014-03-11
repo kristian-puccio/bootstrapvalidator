@@ -12,12 +12,15 @@
          *          // validator is instance of BootstrapValidator
          *      }
          * - message: The invalid message
-         * @returns {Boolean}
+         * @returns {Boolean|Deferred}
          */
         validate: function(validator, $field, options) {
             var value = $field.val();
             if (options.callback && 'function' == typeof options.callback) {
-                return options.callback.call(this, value, this);
+                var dfd = new $.Deferred();
+                dfd.resolve(options.callback.call(this, value, validator), 'callback');
+                return dfd;
+                return options.callback.call(this, value, validator);
             }
             return true;
         }

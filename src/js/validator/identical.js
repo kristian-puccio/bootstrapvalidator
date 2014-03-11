@@ -15,9 +15,13 @@
                 return true;
             }
 
-            var $compareWith = validator.getFieldElement(options.field);
-            if ($compareWith && value == $compareWith.val()) {
-                validator.removeError($compareWith);
+            var compareWith = validator.getFieldElements(options.field);
+            if (compareWith == null) {
+                return true;
+            }
+
+            if (value == compareWith.val()) {
+                validator.updateStatus(compareWith, 'identical', validator.STATUS_VALID);
                 return true;
             } else {
                 return false;

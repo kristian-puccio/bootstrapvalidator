@@ -1,9 +1,34 @@
 # Change Log
 
-## v0.2.3
+## v0.3.0 (2014-03-10)
+
+__New features__:
+
+* [#44: Rewrite entirely using Deferred](https://github.com/nghuuphuoc/bootstrapvalidator/issues/44)
+* #26, #27, #67: Add choice validator
+* [#31: The ```remote``` validator supports dynamic data](https://github.com/nghuuphuoc/bootstrapvalidator/issues/31)
+* [#36, #58: Add method to validate form manually](https://github.com/nghuuphuoc/bootstrapvalidator/issues/58)
+* [#41: Disable submit button on successful form submit](https://github.com/nghuuphuoc/bootstrapvalidator/issues/41)
+* [#42: Add submit button to ```submitHandler()``` parameter](https://github.com/nghuuphuoc/bootstrapvalidator/issues/42)
+* [#48: Add optional feedback icons](https://github.com/nghuuphuoc/bootstrapvalidator/issues/48)
+* [#64: Support Danish zip code](https://github.com/nghuuphuoc/bootstrapvalidator/issues/64)
+* [#65: Support Sweden zip code](https://github.com/nghuuphuoc/bootstrapvalidator/issues/64)
+* [#70: Support custom grid columns](https://github.com/nghuuphuoc/bootstrapvalidator/issues/70)
+* [#71: Show all errors](https://github.com/nghuuphuoc/bootstrapvalidator/issues/71)
+* [#76: Add resetForm() method](https://github.com/nghuuphuoc/bootstrapvalidator/issues/76)
+
+__Fixes__:
 
 * [#50: Don't validate disabled element](https://github.com/nghuuphuoc/bootstrapvalidator/issues/50)
-* [#52: Callback validator does not process if the field is empty](https://github.com/nghuuphuoc/bootstrapvalidator/issues/52)
+* [#51: Submit after submit doesn't work](https://github.com/nghuuphuoc/bootstrapvalidator/issues/51)
+* [#53: Fix notEmpty validator for radios and checkboxes](https://github.com/nghuuphuoc/bootstrapvalidator/issues/53)
+* [#55: The plugin doesn't validate other fields if the ```remote``` validator returns true](https://github.com/nghuuphuoc/bootstrapvalidator/issues/55)
+* [#62: The callback validator passes wrong parameter](https://github.com/nghuuphuoc/bootstrapvalidator/issues/62)
+
+__Document__:
+
+* [#60: Update the installation guide](https://github.com/nghuuphuoc/bootstrapvalidator/pull/60)
+* [#73: Describe which version should be included in the Usage section](https://github.com/nghuuphuoc/bootstrapvalidator/issues/73)
 
 ## v0.2.2 (2014-01-07)
 
@@ -12,7 +37,7 @@
 * [#34: Avoid from calling form submit recursively](https://github.com/nghuuphuoc/bootstrapvalidator/issues/34)
 * [#39: Validate existing fields only](https://github.com/nghuuphuoc/bootstrapvalidator/issues/39)
 * [#40: Fix the issue when the form label doesn't have class](https://github.com/nghuuphuoc/bootstrapvalidator/issues/40)
-* [#43: Only validate not empty field](https://github.com/nghuuphuoc/bootstrapvalidator/issues/43)
+* [#32, #43, #47: Only validate not empty field](https://github.com/nghuuphuoc/bootstrapvalidator/issues/43)
 
 ## v0.2.1 (2013-11-08)
 

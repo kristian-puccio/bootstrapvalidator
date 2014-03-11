@@ -12,7 +12,7 @@
          *      <fieldName>: <fieldValue>
          *  }
          * - message: The invalid message
-         * @returns {Boolean|String}
+         * @returns {Boolean|Deferred}
          */
         validate: function(validator, $field, options) {
             var value = $field.val();
@@ -24,19 +24,28 @@
             if (data == null) {
                 data = {};
             }
+            // Support dynamic data
+            if ('function' == typeof data) {
+                data = data.call(this, validator);
+            }
             data[name] = value;
+
+            var dfd = new $.Deferred();
             var xhr = $.ajax({
                 type: 'POST',
                 url: options.url,
                 dataType: 'json',
                 data: data
-            }).success(function(response) {
-                var isValid =  response.valid === true || response.valid === 'true';
-                validator.completeRequest($field, 'remote', isValid);
             });
-            validator.startRequest($field, 'remote', xhr);
+            xhr.then(function(response) {
+                dfd.resolve(response.valid === true || response.valid === 'true', 'remote');
+            });
 
-            return 'pending';
+            dfd.fail(function() {
+                xhr.abort();
+            });
+
+            return dfd;
         }
     };
 }(window.jQuery));
